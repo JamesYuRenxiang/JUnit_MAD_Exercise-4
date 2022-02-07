@@ -53,6 +53,36 @@ class ListActivityTest {
 
     }
 
+    @Test
+    fun testRecyclerListVisible() {
+        launch(ListActivity::class.java)
+        onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testRecyclerListContent() {
+        launch(ListActivity::class.java)
+        for (i in 0..19) {
+            onView(withId(R.id.recyclerView)).perform(
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(i, clickOnViewChild(R.id.username)))
+        }
+    }
+
+    @Test
+    fun testRecyclerChild() {
+        launch(ListActivity::class.java)
+        onView(withId(R.id.recyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(10, clickOnViewChild(R.id.userProfilePic))
+        )
+        onView(withText("View"))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+            .perform(click())
+        onView(withId(R.id.btnFollow))
+            .perform(click())
+            .check(matches(isDisplayed()))
+    }
+
     fun clickOnViewChild(viewId: Int) = object : ViewAction {
 
         override fun getConstraints() = null
